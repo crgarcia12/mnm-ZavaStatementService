@@ -15,8 +15,7 @@
         "Define and apply target runtime/framework baseline for modernization",
         "Update incompatible dependencies required by the selected baseline",
         "Ensure downstream modernization tasks can depend on this upgraded baseline"
-      ],
-      "skill": "execute-dotnet-upgrade-task"
+      ]
     },
     {
       "id": "002-security",
@@ -35,8 +34,7 @@
         "Identify and remediate critical/high CVEs in runtime and dependencies",
         "Document residual risks and required compensating controls where applicable",
         "Establish repeatable vulnerability scan and validation gate"
-      ],
-      "skill": "execute-security-task"
+      ]
     },
     {
       "id": "003-deployment",
@@ -55,8 +53,7 @@
         "Package service for Azure Container Apps deployment",
         "Configure environment settings and secrets securely",
         "Execute post-deployment smoke tests and verify service health"
-      ],
-      "skill": "execute-deployment-task"
+      ]
     }
   ]
 }
