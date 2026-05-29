@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Tasks template for modernization plan. Generate this file alongside plan.md to track individual migration tasks.",
+  "tasks": [
+    {
+      "type": "upgrade",
+      "id": "001-upgrade-dotnet-to-net10",
+      "description": "Upgrade .NET to latest LTS (net10.0)",
+      "reason": "The application is on legacy .NET Framework and modernization requires a supported runtime baseline for Azure-native evolution.",
+      "requirements": "Upgrade the application runtime and project format to .NET 10 (latest LTS) while preserving current service behavior and API contracts.",
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "transform",
+      "id": "002-transform-adopt-azure-cloud-native-services",
+      "description": "Modernize application integrations to Azure cloud-native services",
+      "reason": "The user requested modernization to cloud-native services as part of Azure adoption.",
+      "requirements": "Modernize the application to use Azure cloud-native services for data access, runtime identity, and operational logging/telemetry with managed identity-based authentication.",
+      "dependencies": [
+        "001-upgrade-dotnet-to-net10"
+      ],
+      "skills": [
+        {
+          "name": "migration-azure-sql-database",
+          "location": "builtin"
+        },
+        {
+          "name": "migration-managed-identity",
+          "location": "builtin"
+        },
+        {
+          "name": "migration-console-logging",
+          "location": "builtin"
+        }
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "security",
+      "id": "003-security-remediate-cves",
+      "description": "Scan and remediate known CVEs in project dependencies",
+      "reason": "Security remediation is mandatory for every modernization plan before deployment.",
+      "requirements": "Scan all dependencies for known CVEs and remediate vulnerabilities to patched versions. Document any major upgrade risk and confirm build/test health after remediation.",
+      "dependencies": [
+        "002-transform-adopt-azure-cloud-native-services"
+      ],
+      "successCriteria": {
+        "passBuild": "true",
+        "generateNewUnitTests": "false",
+        "passUnitTests": "true"
+      }
+    },
+    {
+      "type": "deployment",
+      "id": "004-deployment-azure-container-apps",
+      "description": "Deploy the modernized application to Azure Container Apps",
+      "reason": "The user explicitly requested deploying the modernized application to Azure.",
+      "requirements": "Containerize and deploy the modernized service to Azure Container Apps using managed identity and production-ready configuration.",
+      "dependencies": [
+        "003-security-remediate-cves"
+      ],
+      "skills": [
+        {
+          "name": "azcli-containerapp-deploy",
+          "location": "builtin"
+        }
+      ],
+      "targetAzureService": "Azure Container Apps",
+      "resourceStatus": "create new service",
+      "deploymentTool": "bicep"
+    }
+  ],
+  "metadata": {
+    "planName": "plan",
+    "projectName": "Zava Statement Service",
+    "language": "dotnet",
+    "createdAt": "2026-05-29T08:02:16.051Z",
+    "version": "1.0"
+  }
+}
