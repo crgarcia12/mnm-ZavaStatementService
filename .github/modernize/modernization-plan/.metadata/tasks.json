@@ -1,0 +1,59 @@
+{
+  "tasks": [
+    {
+      "id": "001-upgrade",
+      "title": "Establish .NET modernization baseline",
+      "description": "Upgrade the current .NET Framework service baseline to a supported modernization-ready runtime and align project/dependencies for Azure migration execution.",
+      "type": "upgrade",
+      "target": ".NET modernization baseline",
+      "dependencies": [],
+      "validation": {
+        "method": "build + unit tests",
+        "expected": "Application builds and tests pass on a supported agent/runtime for the selected target"
+      },
+      "requirements": [
+        "Define and apply target runtime/framework baseline for modernization",
+        "Update incompatible dependencies required by the selected baseline",
+        "Ensure downstream modernization tasks can depend on this upgraded baseline"
+      ]
+    },
+    {
+      "id": "002-security",
+      "title": "Remediate security vulnerabilities and harden dependencies",
+      "description": "Perform security/CVE remediation for runtime and package dependencies and validate no critical/high vulnerabilities remain before deployment.",
+      "type": "security",
+      "target": "Application dependency and runtime security posture",
+      "dependencies": [
+        "001-upgrade"
+      ],
+      "validation": {
+        "method": "security scan + policy checks",
+        "expected": "No open critical/high CVEs and remediation evidence recorded"
+      },
+      "requirements": [
+        "Identify and remediate critical/high CVEs in runtime and dependencies",
+        "Document residual risks and required compensating controls where applicable",
+        "Establish repeatable vulnerability scan and validation gate"
+      ]
+    },
+    {
+      "id": "003-deployment",
+      "title": "Deploy service to Azure Container Apps",
+      "description": "Containerize and deploy the modernized service to Azure Container Apps as the default deployment target with smoke-test validation.",
+      "type": "deployment",
+      "target": "Azure Container Apps",
+      "dependencies": [
+        "002-security"
+      ],
+      "validation": {
+        "method": "deployment + smoke tests",
+        "expected": "Service is deployed and health/smoke checks pass in Azure environment"
+      },
+      "requirements": [
+        "Package service for Azure Container Apps deployment",
+        "Configure environment settings and secrets securely",
+        "Execute post-deployment smoke tests and verify service health"
+      ]
+    }
+  ]
+}
